@@ -2,6 +2,7 @@
 package com.firstservlet;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Pattern;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
@@ -22,14 +23,16 @@ import static jdk.internal.org.jline.utils.Colors.s;
 public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//get request parameters for userID and password 
+        String nameRegex="^[A-Z]{1}[a-z]{3,}$";
+        //get request parameters for userID and password
+
         String user = req.getParameter("user");
         String pwd = req.getParameter("pwd");
 //get servlet config init params
 
         String userID = getServletConfig().getInitParameter("user");
         String password = getServletConfig().getInitParameter("password");
-        if(userID.equals(user) && password.equals(pwd)) {
+        if(userID.equals(user) && password.equals(pwd) && Pattern.matches(nameRegex,userID)) {
             req.setAttribute("user",user);
             req.getRequestDispatcher("LoginSuccess.jsp").forward(req, resp);
         } else {
